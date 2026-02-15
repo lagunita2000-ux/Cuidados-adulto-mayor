@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema para Adulto Mayor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 50px;
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+            font-size: 16px;
+            font-weight: 500;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.activo {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-btn:hover {
+            color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.activo {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #764ba2;
+        }
+
+        button.secundario {
+            background: #ddd;
+            color: #333;
+        }
+
+        button.secundario:hover {
+            background: #ccc;
+        }
+
+        .lista {
+            margin-top: 30px;
+        }
+
+        .item {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item-contenido {
+            flex: 1;
+        }
+
+        .item-titulo {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .item-fecha {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .btn-eliminar {
+            background: #ff6b6b;
+            padding: 8px 12px;
+            font-size: 14px;
+            margin-left: 10px;
+            width: auto;
+        }
+
+        .btn-eliminar:hover {
+            background: #ff5252;
+        }
+
+        .mensaje {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .mensaje.exito {
+            display: block;
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .mensaje.error {
+            display: block;
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .vacio {
+            text-align: center;
+            color: #999;
+            padding: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .btn-eliminar {
+                margin-left: 0;
+                margin-top: 10px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👴 Sistema para Adulto Mayor</h1>
+            <p>Tu aplicación personal sin conexión a internet</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn activo" onclick="mostrarTab('recordatorios')">📋 Recordatorios</button>
+            <button class="tab-btn" onclick="mostrarTab('medicinas')">💊 Medicinas</button>
+            <button class="tab-btn" onclick="mostrarTab('contactos')">📞 Contactos</button>
+        </div>
+
+        <!-- TAB 1: RECORDATORIOS -->
+        <div id="recordatorios" class="tab-content activo">
+            <div id="mensajeRecordatorios" class="mensaje"></div>
+            
+            <div class="form-group">
+                <label for="recordatorio">Nuevo Recordatorio:</label>
+                <input type="text" id="recordatorio" placeholder="Ej: Ir al doctor, Pasear" maxlength="100">
+            </div>
+
+            <div class="form-group">
+                <label for="fechaRecordatorio">Fecha:</label>
+                <input type="date" id="fechaRecordatorio">
+            </div>
+
+            <div class="button-group">
+                <button onclick="agregarRecordatorio()">Guardar</button>
+                <button class="secundario" onclick="limpiarRecordatorios()">Limpiar</button>
+            </div>
+
+            <div class="lista" id="listaRecordatorios"></div>
+        </div>
+
+        <!-- TAB 2: MEDICINAS -->
+        <div id="medicinas" class="tab-content">
+            <div id="mensajeMedicinas" class="mensaje"></div>
+
+            <div class="form-group">
+                <label for="medicina">Nombre de la Medicina:</label>
+                <input type="text" id="medicina" placeholder="Ej: Aspirina, Paracetamol">
+            </div>
+
+            <div class="form-group">
+                <label for="dosis">Dosis:</label>
+                <input type="text" id="dosis" placeholder="Ej: 500mg, 2 comprimidos">
+            </div>
+
+            <div class="form-group">
+                <label for="frecuencia">Frecuencia:</label>
+                <select id="frecuencia">
+                    <option>Cada 8 horas</option>
+                    <option>Cada 12 horas</option>
+                    <option>Una vez al día</option>
+                    <option>Según sea necesario</option>
+                </select>
+            </div>
+
+            <div class="button-group">
+                <button onclick="agregarMedicina()">Guardar</button>
+                <button class="secundario" onclick="limpiarMedicinas()">Limpiar</button>
+            </div>
+
+            <div class="lista" id="listaMedicinas"></div>
+        </div>
+
+        <!-- TAB 3: CONTACTOS -->
+        <div id="contactos" class="tab-content">
+            <div id="mensajeContactos" class="mensaje"></div>
+
+            <div class="form-group">
+                <label for="nombreContacto">Nombre:</label>
+                <input type="text" id="nombreContacto" placeholder="Ej: Doctor García">
+            </div>
+
+            <div class="form-group">
+                <label for="telefonoContacto">Teléfono:</label>
+                <input type="tel" id="telefonoContacto" placeholder="Ej: +34 123 456 789">
+            </div>
+
+            <div class="form-group">
+                <label for="relacionContacto">Relación:</label>
+                <input type="text" id="relacionContacto" placeholder="Ej: Médico, Hijo, Farmacéutico">
+            </div>
+
+            <div class="button-group">
+                <button onclick="agregarContacto()">Guardar</button>
+                <button class="secundario" onclick="limpiarContactos()">Limpiar</button>
+            </div>
+
+            <div class="lista" id="listaContactos"></div>
+        </div>
+    </div>
+
+    <script>
+        // UTILIDADES
+        function mostrarTab(tab) {
+            // Ocultar todos los tabs
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('activo'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('activo'));
+
+            // Mostrar tab seleccionado
+            document.getElementById(tab).classList.add('activo');
+            event.target.classList.add('activo');
+        }
+
+        function mostrarMensaje(tipo, texto, tabId) {
+            const elemento = document.getElementById(`mensaje${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`);
+            elemento.textContent = texto;
+            elemento.className = `mensaje ${tipo}`;
+            setTimeout(() => elemento.className = 'mensaje', 3000);
+        }
+
+        // RECORDATORIOS
+        function agregarRecordatorio() {
+            const texto = document.getElementById('recordatorio').value.trim();
+            const fecha = document.getElementById('fechaRecordatorio').value;
+
+            if (!texto) {
+                mostrarMensaje('error', '⚠️ Por favor escribe un recordatorio', 'recordatorios');
+                return;
+            }
+
+            const recordatorios = JSON.parse(localStorage.getItem('recordatorios') || '[]');
+            recordatorios.push({
+                id: Date.now(),
+                texto: texto,
+                fecha: fecha || new Date().toISOString().split('T')[0]
+            });
+
+            localStorage.setItem('recordatorios', JSON.stringify(recordatorios));
+            mostrarMensaje('exito', '✅ Recordatorio guardado', 'recordatorios');
+            document.getElementById('recordatorio').value = '';
+            document.getElementById('fechaRecordatorio').value = '';
+            actualizarRecordatorios();
+        }
+
+        function eliminarRecordatorio(id) {
+            const recordatorios = JSON.parse(localStorage.getItem('recordatorios') || '[]');
+            const nuevos = recordatorios.filter(r => r.id !== id);
+            localStorage.setItem('recordatorios', JSON.stringify(nuevos));
+            actualizarRecordatorios();
+        }
+
+        function actualizarRecordatorios() {
+            const recordatorios = JSON.parse(localStorage.getItem('recordatorios') || '[]');
+            const lista = document.getElementById('listaRecordatorios');
+
+            if (recordatorios.length === 0) {
+                lista.innerHTML = '<div class="vacio">No hay recordatorios. ¡Agrega uno!</div>';
+                return;
+            }
+
+            lista.innerHTML = recordatorios.map(r => `
+                <div class="item">
+                    <div class="item-contenido">
+                        <div class="item-titulo">📋 ${r.texto}</div>
+                        <div class="item-fecha">📅 ${r.fecha}</div>
+                    </div>
+                    <button class="btn-eliminar" onclick="eliminarRecordatorio(${r.id})">Eliminar</button>
+                </div>
+            `).join('');
+        }
+
+        function limpiarRecordatorios() {
+            if (confirm('¿Estás seguro de que quieres eliminar todos los recordatorios?')) {
+                localStorage.removeItem('recordatorios');
+                actualizarRecordatorios();
+                mostrarMensaje('exito', '✅ Todos los recordatorios fueron eliminados', 'recordatorios');
+            }
+        }
+
+        // MEDICINAS
+        function agregarMedicina() {
+            const nombre = document.getElementById('medicina').value.trim();
+            const dosis = document.getElementById('dosis').value.trim();
+            const frecuencia = document.getElementById('frecuencia').value;
+
+            if (!nombre || !dosis) {
+                mostrarMensaje('error', '⚠️ Por favor completa todos los campos', 'medicinas');
+                return;
+            }
+
+            const medicinas = JSON.parse(localStorage.getItem('medicinas') || '[]');
+            medicinas.push({
+                id: Date.now(),
+                nombre: nombre,
+                dosis: dosis,
+                frecuencia: frecuencia,
+                fecha: new Date().toISOString().split('T')[0]
+            });
+
+            localStorage.setItem('medicinas', JSON.stringify(medicinas));
+            mostrarMensaje('exito', '✅ Medicina guardada', 'medicinas');
+            document.getElementById('medicina').value = '';
+            document.getElementById('dosis').value = '';
+            actualizarMedicinas();
+        }
+
+        function eliminarMedicina(id) {
+            const medicinas = JSON.parse(localStorage.getItem('medicinas') || '[]');
+            const nuevas = medicinas.filter(m => m.id !== id);
+            localStorage.setItem('medicinas', JSON.stringify(nuevas));
+            actualizarMedicinas();
+        }
+
+        function actualizarMedicinas() {
+            const medicinas = JSON.parse(localStorage.getItem('medicinas') || '[]');
+            const lista = document.getElementById('listaMedicinas');
+
+            if (medicinas.length === 0) {
+                lista.innerHTML = '<div class="vacio">No hay medicinas registradas. ¡Agrega una!</div>';
+                return;
+            }
+
+            lista.innerHTML = medicinas.map(m => `
+                <div class="item">
+                    <div class="item-contenido">
+                        <div class="item-titulo">💊 ${m.nombre}</div>
+                        <div class="item-fecha">📊 ${m.dosis} - ${m.frecuencia}</div>
+                    </div>
+                    <button class="btn-eliminar" onclick="eliminarMedicina(${m.id})">Eliminar</button>
+                </div>
+            `).join('');
+        }
+
+        function limpiarMedicinas() {
+            if (confirm('¿Estás seguro de que quieres eliminar todas las medicinas?')) {
+                localStorage.removeItem('medicinas');
+                actualizarMedicinas();
+                mostrarMensaje('exito', '✅ Todas las medicinas fueron eliminadas', 'medicinas');
+            }
+        }
+
+        // CONTACTOS
+        function agregarContacto() {
+            const nombre = document.getElementById('nombreContacto').value.trim();
+            const telefono = document.getElementById('telefonoContacto').value.trim();
+            const relacion = document.getElementById('relacionContacto').value.trim();
+
+            if (!nombre || !telefono) {
+                mostrarMensaje('error', '⚠️ Por favor completa nombre y teléfono', 'contactos');
+                return;
+            }
+
+            const contactos = JSON.parse(localStorage.getItem('contactos') || '[]');
+            contactos.push({
+                id: Date.now(),
+                nombre: nombre,
+                telefono: telefono,
+                relacion: relacion || 'Contacto'
+            });
+
+            localStorage.setItem('contactos', JSON.stringify(contactos));
+            mostrarMensaje('exito', '✅ Contacto guardado', 'contactos');
+            document.getElementById('nombreContacto').value = '';
+            document.getElementById('telefonoContacto').value = '';
+            document.getElementById('relacionContacto').value = '';
+            actualizarContactos();
+        }
+
+        function eliminarContacto(id) {
+            const contactos = JSON.parse(localStorage.getItem('contactos') || '[]');
+            const nuevos = contactos.filter(c => c.id !== id);
+            localStorage.setItem('contactos', JSON.stringify(nuevos));
+            actualizarContactos();
+        }
+
+        function actualizarContactos() {
+            const contactos = JSON.parse(localStorage.getItem('contactos') || '[]');
+            const lista = document.getElementById('listaContactos');
+
+            if (contactos.length === 0) {
+                lista.innerHTML = '<div class="vacio">No hay contactos. ¡Agrega uno!</div>';
+                return;
+            }
+
+            lista.innerHTML = contactos.map(c => `
+                <div class="item">
+                    <div class="item-contenido">
+                        <div class="item-titulo">📞 ${c.nombre}</div>
+                        <div class="item-fecha">${c.relacion} - ${c.telefono}</div>
+                    </div>
+                    <button class="btn-eliminar" onclick="eliminarContacto(${c.id})">Eliminar</button>
+                </div>
+            `).join('');
+        }
+
+        function limpiarContactos() {
+            if (confirm('¿Estás seguro de que quieres eliminar todos los contactos?')) {
+                localStorage.removeItem('contactos');
+                actualizarContactos();
+                mostrarMensaje('exito', '✅ Todos los contactos fueron eliminados', 'contactos');
+            }
+        }
+
+        // CARGAR DATOS AL ABRIR LA PÁGINA
+        window.addEventListener('load', function() {
+            actualizarRecordatorios();
+            actualizarMedicinas();
+            actualizarContactos();
+        });
+    </script>
+</body>
+</html>
