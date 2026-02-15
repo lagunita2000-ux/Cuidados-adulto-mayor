@@ -1,9 +1,64 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema para Adulto Mayor</title>
+    <style>
+        /* CSS styles for the application */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .tab {
+            display: none;
+        }
+        .tab.active {
+            display: block;
+        }
+        .tab-links {
+            cursor: pointer;
+            padding: 10px;
+            border: 1px solid #ccc;
+            display: inline-block;
+            margin-right: 5px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Bienvenido al Sistema para Adulto Mayor</h1>
-    <p>Este sistema está diseñado para facilitar la atención y el cuidado adecuado de los adultos mayores.</p>
+    <h1>Sistema para Adulto Mayor</h1>
+    <div>
+        <div class="tab-links" onclick="showTab('recordatorios')">Recordatorios</div>
+        <div class="tab-links" onclick="showTab('medicinas')">Medicinas</div>
+        <div class="tab-links" onclick="showTab('contactos')">Contactos</div>
+    </div>
+    
+    <div id="recordatorios" class="tab active">
+        <h2>Recordatorios</h2>
+        <p>Aquí puedes gestionar tus recordatorios.</p>
+        <!-- Add functionality for recordatorios here -->
+    </div>
+    
+    <div id="medicinas" class="tab">
+        <h2>Medicinas</h2>
+        <p>Aquí puedes gestionar tus medicinas.</p>
+        <!-- Add functionality for medicinas here -->
+    </div>
+    
+    <div id="contactos" class="tab">
+        <h2>Contactos</h2>
+        <p>Aquí puedes gestionar tus contactos.</p>
+        <!-- Add functionality for contactos here -->
+    </div>
+
+    <script>
+        // JavaScript for tab functionality
+        function showTab(tabId) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+        }
+    </script>
 </body>
 </html>
